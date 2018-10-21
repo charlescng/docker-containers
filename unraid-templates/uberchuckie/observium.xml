@@ -8,7 +8,7 @@
   <MyIP/>
   <Shell>bash</Shell>
   <Privileged>false</Privileged>
-  <Support/>
+  <Support>https://forums.unraid.net/topic/36734-guacamole-wallabag-observium-paperwork-zuhkovs-docker-template-repository/?page=8&tab=comments#comment-688547</Support>
   <Project/>
   <Overview>[h3]Observium[/h3]Observium is an autodiscovering network monitoring platform supporting a wide range of hardware platforms and operating systems.[br][br]&#xD;
 [b][span style='color: #E80000;']Directions:[/span][/b][br]&#xD;
