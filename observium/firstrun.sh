@@ -34,6 +34,11 @@ else
   sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ UTC#g" /etc/php/8.1/apache2/php.ini
 fi
 
-# Workaround graph times not using system/php/database TZ or TZ environment
+if [ -f /etc/container_environment/OBSERVIUM_ADMIN_USER ] ; then
+  ./opt/observium/adduser.php $OBSERVIUM_ADMIN_USER observium 10
+else
+  echo "no environment admin set"
+fi
+
 rm /etc/localtime
 ln -s /usr/share/zoneinfo/$(cat /etc/container_environment/TZ) /etc/localtime
