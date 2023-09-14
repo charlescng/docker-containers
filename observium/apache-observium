@@ -14,4 +14,8 @@
        LogLevel warn
        CustomLog  /opt/observium/logs/access_log combined
        ServerSignature On
+       SSLEngine On
+       SSLCertificateFile /opt/observium/certificates/apache.pem
+       SSLCertificateKeyFile /opt/observium/certificates/apache.key
+       SSLCertificateChainFile /opt/observium/certificates/apache-chain.pem
 </VirtualHost>
