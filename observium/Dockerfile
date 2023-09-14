@@ -57,7 +57,7 @@ RUN sed -i -e 's#\(bind-address.*=\).*#\1 127.0.0.1#g' /etc/mysql/mariadb.conf.d
     echo '[mysqld]' > /etc/mysql/conf.d/innodb_file_per_table.cnf && \
     echo 'innodb_file_per_table' >> /etc/mysql/conf.d/innodb_file_per_table.cnf
 
-RUN mkdir -p /opt/observium/firstrun /opt/observium/logs /opt/observium/rrd /config && \
+RUN mkdir -p /opt/observium/firstrun /opt/observium/logs /opt/observium/rrd /opt/observium/certificates /config && \
     cd /opt && \
     wget http://www.observium.org/observium-community-latest.tar.gz && \
     tar zxvf observium-community-latest.tar.gz && \
@@ -69,6 +69,7 @@ RUN chown nobody:users /opt/observium/update/184.sql && \
     chmod 755 /opt/observium/update/184.sql
 
 RUN a2enmod rewrite
+RUN a2enmod ssl
 
 RUN mkdir /etc/service/apache2
 COPY apache2.sh /etc/service/apache2/run
@@ -113,7 +114,7 @@ COPY observium.conf /etc/syslog-ng/conf.d/observium.conf
 EXPOSE 514/udp
 EXPOSE 8668/tcp
 
-VOLUME ["/config","/opt/observium/logs","/opt/observium/rrd"]
+VOLUME ["/config","/opt/observium/logs","/opt/observium/rrd","/opt/observium/certificates"]
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
