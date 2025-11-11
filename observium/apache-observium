@@ -1,3 +1,4 @@
+# Plain part
 <VirtualHost *:8668>
        ServerAdmin webmaster@localhost
        DocumentRoot /opt/observium/html
@@ -14,4 +15,27 @@
        LogLevel warn
        CustomLog  /opt/observium/logs/access_log combined
        ServerSignature On
+</VirtualHost>
+
+# SSL part
+<VirtualHost *:8669>
+       ServerAdmin webmaster@localhost
+       DocumentRoot /opt/observium/html
+       <Directory />
+               Options FollowSymLinks
+               AllowOverride None
+       </Directory>
+       <Directory /opt/observium/html/>
+              Options Indexes FollowSymLinks MultiViews
+              AllowOverride All
+              Require all granted
+      </Directory>
+       ErrorLog  /opt/observium/logs/error_log
+       LogLevel warn
+       CustomLog  /opt/observium/logs/access_log combined
+       ServerSignature On
+       SSLEngine On
+       # only one certificate, certificate with CA or intermediate certificate
+       SSLCertificateFile "/opt/observium/certificates/fullchain.pem"
+       SSLCertificateKeyFile "/opt/observium/certificates/privkey.pem"
 </VirtualHost>

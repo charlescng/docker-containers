@@ -47,7 +47,7 @@ RUN apt-get update -q && \
       libapache2-mod-php8.3 php8.3-cli php8.3-mysql php8.3-gd php8.3-bcmath php8.3-mbstring \
       php8.3-opcache php8.3-curl php-apcu php-pear snmp fping rrdtool subversion \
       whois mtr-tiny ipmitool graphviz imagemagick apache2 python3-mysqldb python3-pymysql python-is-python3 \
-      nmap wget pwgen at libvirt-clients libvirt-daemon-system && \
+      nmap wget pwgen at libvirt-clients libvirt-daemon-system openssl sendmail && \
     apt-get update -q -y
 
 # Tweak MariaDB configuration
@@ -63,7 +63,7 @@ RUN mkdir -p /opt/observium/firstrun /opt/observium/logs /opt/observium/rrd /con
     tar zxvf observium-community-latest.tar.gz && \
     rm observium-community-latest.tar.gz
 
-RUN a2enmod rewrite
+RUN a2enmod rewrite ssl
 
 RUN mkdir /etc/service/apache2
 COPY apache2.sh /etc/service/apache2/run
@@ -107,8 +107,9 @@ COPY observium.conf /etc/syslog-ng/conf.d/observium.conf
 
 EXPOSE 514/udp
 EXPOSE 8668/tcp
+EXPOSE 8669/tcp
 
-VOLUME ["/config","/opt/observium/logs","/opt/observium/rrd"]
+VOLUME ["/config","/opt/observium/logs","/opt/observium/rrd","/opt/observium/certificates"]
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

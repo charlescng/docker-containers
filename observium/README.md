@@ -24,7 +24,7 @@ cd observium
 docker build -t uberchuckie/observium .
 ```
 
-You can also obtain it via:  
+You can also obtain it via:
 
 ```
 docker pull uberchuckie/observium
@@ -51,6 +51,21 @@ If you do not specify a timezone, the timezone will be set to UTC.
 Browse to ```http://your-host-ip:8668``` and login with user and password `observium`
 
 To support syslog ingestion forward port 514 into docker (`-p 514:514/udp`).
+
+---
+Running the container with SSL/TLS
+===
+
+Create the certificate directory and drop/link there two files: 
+- fullchain.pem - only certificate, certificate with CA or certificate with CA and intermediate certificate chain (https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslcertificatefile)
+- privkey.pem - private key (https://httpd.apache.org/docs/current/mod/mod_ssl.html#sslcertificatekeyfile)
+
+Start the container:
+```
+docker run -d -v /your-config-location:/config -v /path-to-logs:/opt/observium/logs -v /path-to-certificates:/opt/observium/certificates -v /path-to-rrds:/opt/observium/rrd -e TZ="America/Chicago" -p 8669:8669 uberchuckie/observium
+```
+
+Browse to ```http://your-host-ip:8669``` and login with user and password `observium`
 
 ---
 Credits
