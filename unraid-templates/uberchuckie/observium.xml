@@ -11,6 +11,7 @@
 [b]/config[/b] : this path is where Observium will store its PHP config file and the database which contains data for users, devices, and data.[br]&#xD;
 [b]/opt/observium/logs[/b] : this path is where Observium will store its logs.[br]&#xD;
 [b]/opt/observium/rrd[/b] : this path is where Observium will store its Round-Robin Database (RRD) data.[br]&#xD;
+[b]/opt/observium/certificates[/b] : this path is where Observium will store its SSL/TLS certificates.[br]&#xD;
   </Overview>
   <Category>Network:Management</Category>
   <Beta>false</Beta>
@@ -23,6 +24,7 @@
 [b]/config[/b] : this path is where Observium will store its PHP config file and the database which contains data for users, devices, and data.[br]&#xD;
 [b]/opt/observium/logs[/b] : this path is where Observium will store its logs.[br]&#xD;
 [b]/opt/observium/rrd[/b] : this path is where Observium will store its Round-Robin Database (RRD) data.[br]&#xD;
+[b]/opt/observium/certificates[/b] : this path is where Observium will store its SSL/TLS certificates.[br]&#xD;
   </Description>
   <Networking>
     <Mode>bridge</Mode>
@@ -30,6 +32,11 @@
       <Port>
         <HostPort>8668</HostPort>
         <ContainerPort>8668</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>8669</HostPort>
+        <ContainerPort>8669</ContainerPort>
         <Protocol>tcp</Protocol>
       </Port>
       <Port>
@@ -53,6 +60,11 @@
     <Volume>
       <HostDir>/mnt/user/appdata/observium/rrd</HostDir>
       <ContainerDir>/opt/observium/rrd</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/appdata/observium/certificates</HostDir>
+      <ContainerDir>/opt/observium/certificates</ContainerDir>
       <Mode>rw</Mode>
     </Volume>
   </Data>
