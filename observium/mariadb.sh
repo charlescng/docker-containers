@@ -39,6 +39,9 @@ fi
 echo "Fixing file permissions."
 chown -R nobody:users /config/databases
 chmod -R 755 /config/databases
+chown -R nobody:users /run/mysqld
+chmod -R 755 /run/mysqld
+
 sleep 3
 
 echo "Starting MariaDB..."

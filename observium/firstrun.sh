@@ -1,5 +1,37 @@
 #!/bin/bash
 
+# Generate self signed certificate if certificates folder is empty
+# Define the folder to check and certificate details
+CERT_DIR="/opt/observium/certificates"
+CERT_FILE="$CERT_DIR/fullchain.pem"
+KEY_FILE="$CERT_DIR/privkey.pem"
+
+# Check if the folder exists and is empty
+if [ ! -d "$CERT_DIR" ]; then
+  echo "Directory $CERT_DIR does not exist. Creating it..."
+  mkdir -p "$CERT_DIR"
+fi
+
+if [ "$(ls -A $CERT_DIR)" ]; then
+  echo "Directory $CERT_DIR is not empty. No certificate will be generated."
+else
+  echo "Directory $CERT_DIR is empty. Generating self-signed certificate..."
+
+  # Generate a self-signed certificate
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout "$KEY_FILE" \
+    -out "$CERT_FILE" \
+    -subj "/C=DE/ST=Mecklenburg-Vorpommern/L=Dummerstorf/O=FBN/OU=IT/CN=localhost"
+
+  if [ $? -eq 0 ]; then
+    echo "Self-signed certificate and key generated successfully:"
+    echo "Certificate: $CERT_FILE"
+    echo "Key: $KEY_FILE"
+  else
+    echo "Failed to generate the self-signed certificate."
+  fi
+fi
+
 atd
 
 # Check if PHP database config exists. If not, copy in the default config
