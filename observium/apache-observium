@@ -2,6 +2,14 @@
 <VirtualHost *:8668>
        ServerAdmin webmaster@localhost
        DocumentRoot /opt/observium/html
+
+       RemoteIPHeader X-Forwarded-For
+       RemoteIPTrustedProxy 10.0.0.0/8
+       RemoteIPTrustedProxy 172.16.0.0/12
+       RemoteIPTrustedProxy 192.168.0.0/16
+
+       SetEnvIf X-Forwarded-Proto "https" HTTPS=on
+
        <Directory />
                Options FollowSymLinks
                AllowOverride None
