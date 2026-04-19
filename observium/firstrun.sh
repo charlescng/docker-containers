@@ -48,13 +48,30 @@ else
   sed -i -e 's/PASSWORD/'$PW'/g' /config/config.php
   sed -i -e 's/USERNAME/observium/g' /config/config.php
 fi
-
 # if syslog config line is not already in config.php then add it
 grep -qF 'enable_syslog' /config/config.php || echo "\$config['enable_syslog'] = 1;" >> /config/config.php
+
+# Add dynamic base_url and reverse proxy support to config.php
+grep -qF 'Dynamic base_url detection' /config/config.php || cat <<'EOF' >> /config/config.php
+
+// --- Dynamic base_url detection ---
+if (isset($_SERVER['HTTP_HOST'])) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+        $_SERVER['HTTPS'] = 'on';
+    }
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+    $prefix = isset($_SERVER['HTTP_X_FORWARDED_PREFIX']) ? rtrim($_SERVER['HTTP_X_FORWARDED_PREFIX'], '/') : '';
+    $script_path = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+    $config['base_url'] = $protocol . "://" . $host . $prefix . $script_path . "/";
+}
+// ----------------------------------
+EOF
 
 ln -s /config/config.php /opt/observium/config.php
 chown nobody:users -R /opt/observium
 chmod 755 -R /opt/observium
+chmod 755 /config/config.php
 
 if [ -f /etc/container_environment/TZ ] ; then
   sed -i "s#\;date\.timezone\ \=#date\.timezone\ \=\ $TZ#g" /etc/php/8.3/cli/php.ini

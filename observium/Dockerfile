@@ -63,7 +63,7 @@ RUN mkdir -p /opt/observium/firstrun /opt/observium/logs /opt/observium/rrd /con
     tar zxvf observium-community-latest.tar.gz && \
     rm observium-community-latest.tar.gz
 
-RUN a2enmod rewrite ssl
+RUN a2enmod rewrite ssl remoteip headers
 
 RUN mkdir /etc/service/apache2
 COPY apache2.sh /etc/service/apache2/run
