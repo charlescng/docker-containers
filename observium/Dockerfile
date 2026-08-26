@@ -2,7 +2,7 @@
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
-FROM phusion/baseimage:noble-1.0.2
+FROM phusion/baseimage:resolute-1.0.13
 LABEL org.opencontainers.image.authors="uberchuckie@gmail.com"
 
 # Set correct environment variables.
@@ -38,14 +38,14 @@ RUN locale-gen ru_RU.UTF-8
 RUN locale-gen sl_SI.UTF-8
 RUN locale-gen uk_UA.UTF-8
 
-RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --mariadb-server-version=mariadb-11.4 --skip-maxscale
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --mariadb-server-version=mariadb-11.8 --skip-maxscale
 
 # Install Observium prereqs
 RUN apt-get update -q && \
     apt-get upgrade -y -q && \
     apt-get install -y --no-install-recommends mariadb-server mariadb-client \
-      libapache2-mod-php8.3 php8.3-cli php8.3-mysql php8.3-gd php8.3-bcmath php8.3-mbstring \
-      php8.3-opcache php8.3-curl php-apcu php-pear snmp fping rrdtool subversion \
+      libapache2-mod-php8.5 php8.5-cli php8.5-mysql php8.5-gd php8.5-bcmath php8.5-mbstring \
+      php8.5-curl php-apcu php-pear snmp fping rrdtool subversion \
       whois mtr-tiny ipmitool graphviz imagemagick apache2 python3-mysqldb python3-pymysql python-is-python3 \
       nmap wget pwgen at libvirt-clients libvirt-daemon-system openssl sendmail && \
     apt-get update -q -y
@@ -59,7 +59,7 @@ RUN sed -i -e 's#\(bind-address.*=\).*#\1 127.0.0.1#g' /etc/mysql/mariadb.conf.d
 
 RUN mkdir -p /opt/observium/firstrun /opt/observium/logs /opt/observium/rrd /config && \
     cd /opt && \
-    wget http://www.observium.org/observium-community-latest.tar.gz && \
+    wget https://www.observium.org/observium-community-latest.tar.gz && \
     tar zxvf observium-community-latest.tar.gz && \
     rm observium-community-latest.tar.gz
 
