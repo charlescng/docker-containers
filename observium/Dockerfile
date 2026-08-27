@@ -75,6 +75,7 @@ RUN a2enmod rewrite ssl remoteip headers \
 
 # Setup Observium cron jobs and syslog config
 COPY --chmod=744 cron-observium /etc/cron.d/observium
+COPY --chmod=755 syslog-wait.sh /usr/local/sbin/syslog-wait
 COPY observium.conf /etc/syslog-ng/conf.d/observium.conf
 
 EXPOSE 514/udp
