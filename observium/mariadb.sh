@@ -1,4 +1,8 @@
 #!/bin/bash
+mkdir -p /run/mysqld
+chown -R nobody:users /run/mysqld
+chmod -R 755 /run/mysqld
+
 start_mariadb(){
     /usr/bin/mariadbd-safe --datadir=/config/databases > /dev/null 2>&1 &
     RET=1
@@ -14,7 +18,7 @@ if [ -f /config/databases/observium/users.ibd ]; then
   echo "Database exists."
 else
   echo "Initializing Data Directory."
-  /usr/bin/mariadb-install-db --datadir=/config/databases >/dev/null 2>&1
+  /usr/bin/mariadb-install-db --user=nobody --datadir=/config/databases || { echo "mariadb-install-db failed"; exit 1; }
   echo "Installation complete."
   start_mariadb
   echo "Creating database."
@@ -39,8 +43,6 @@ fi
 echo "Fixing file permissions."
 chown -R nobody:users /config/databases
 chmod -R 755 /config/databases
-chown -R nobody:users /run/mysqld
-chmod -R 755 /run/mysqld
 
 sleep 3
 
